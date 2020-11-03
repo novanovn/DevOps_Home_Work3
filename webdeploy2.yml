@@ -42,6 +42,15 @@ spec:
          labels:
             app: webdeploy
      spec:
+        affinity:
+           nodeAffinity:
+             requiredDuringSchedulingIgnoredDuringExecution:
+               nodeSelectorTerms:
+               - matchExpressions:
+                 - key: kubernetes.io/hostname
+                   operator: In
+                   values:
+				           - worker02
          containers:
          -  image: vimal13/apache-webserver-php
             name: webdeploy
