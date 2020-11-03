@@ -19,7 +19,6 @@ metadata:
   labels:
     app: webdeploy
 spec:
-  storageClassName: svrbkp01-nfs-storage
   accessModes:
   - ReadWriteOnce
   resources:
