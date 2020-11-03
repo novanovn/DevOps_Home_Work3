@@ -42,6 +42,8 @@ spec:
          labels:
             app: webdeploy
      spec:
+         affinity:
+         
          containers:
          -  image: vimal13/apache-webserver-php
             name: webdeploy
