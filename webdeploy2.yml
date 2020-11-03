@@ -1,58 +1,17 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: webdeploy
-  labels:
-    app: webdeploy
-spec:
-  ports:
-  - port: 80
-    nodePort: 30080
-  selector:
-    app: webdeploy
-  type: NodePort
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: web-pvc
-  labels:
-    app: webdeploy
-spec:
-  storageClassName: svrbkp01-nfs-storage
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+sudo cd /root/test-jenkins-cloud-k8s-slave-build2
+sudo ls
+if sudo kubectl get all|grep webdeploy
+then
+sudo kubectl delete deploy webdeploy
+sudo kubectl delete svc webdeploy
+sudo kubectl delete pvc web-pvc
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-   name: webdeploy
-   labels:
-     app: webdeploy
-spec:
-   selector:
-     matchLabels:
-         app: webdeploy
-   replicas: 1
-   template:
-     metadata:
-         labels:
-            app: webdeploy
-     spec:
-         containers:
-         -  image: vimal13/apache-webserver-php
-            name: webdeploy
-            ports:
-            -  containerPort: 80
-               name: webdeploy
-            volumeMounts:
-            -  name: web-pv
-               mountPath: /var/www/html
-         volumes:
-         -  name: web-pv
-            persistentVolumeClaim:
-               claimName: web-pvc
+sudo kubectl create -f /root/test-jenkins-cloud-k8s-slave-build2/webdeploy2.yml
+sleep 10
+sudo kubectl get all
+else
+sudo kubectl create -f /root/test-jenkins-cloud-k8s-slave-build2/webdeploy2.yml
+sleep 10
+sudo kubectl get all
+fi
+sudo kubectl cp /root/test-jenkins-cloud-k8s-slave-build2/hello.html $(sudo kubectl get pod|grep webdeploy|awk '{print$1}'):/var/www/html/hello.html
