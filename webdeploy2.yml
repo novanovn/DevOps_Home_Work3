@@ -50,7 +50,7 @@ spec:
                  - key: kubernetes.io/hostname
                    operator: In
                    values:
-				           - worker02
+		   - worker02
          containers:
          -  image: vimal13/apache-webserver-php
             name: webdeploy
